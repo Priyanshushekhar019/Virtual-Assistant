@@ -1,15 +1,17 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export const userDataContext = createContext();
 
 function UserContext({ children }) {
-    const serverUrl = "http://localhost:8000/api/auth"; 
-    
+    const serverUrl = "http://localhost:8000/api/auth";
+
     // Manage user data state centrally
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
-    
+
     // Assistant Customization State
     const [frontendImage, setFrontendImage] = useState(null);
     const [backendImage, setBackendImage] = useState(null);
@@ -26,6 +28,15 @@ function UserContext({ children }) {
             setLoading(false);
         }
     }
+    const getGeminiResponse = async (command) => {
+        try {
+            const result = await axios.post(`${serverUrl}/api/user/asktoassistant`, { command }, { withCredentials: true })
+            return result.data
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
 
     useEffect(() => {
         handleCurrentUser();
@@ -38,7 +49,8 @@ function UserContext({ children }) {
         loading,
         frontendImage, setFrontendImage,
         backendImage, setBackendImage,
-        selectedImage, setSelectedImage
+        selectedImage, setSelectedImage,
+        getGeminiResponse
     };
 
     return (

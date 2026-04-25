@@ -14,6 +14,7 @@ function Customize2() {
     const [error, setError] = useState('');
 
     const handleSubmit = async () => {
+        setLoading(true)
         if (!assistantName.trim()) {
             setError("Assistant Name is required.");
             return;
@@ -44,8 +45,10 @@ function Customize2() {
             if (response.status === 200) {
                 setUserData(response.data);
                 navigate('/');
+                setLoading(false)
             }
         } catch (err) {
+            setLoading(false)
             console.error("Save assistant error:", err);
             setError(err.response?.data?.message || "Failed to customize assistant. Please try again.");
         } finally {

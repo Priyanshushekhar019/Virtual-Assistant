@@ -1,0 +1,16 @@
+1. Signing up a test user...
+Signup success. Cookie: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5Yzc4ZWIxNzkzOGU1ZGIyOWZlOTZmZiIsImlhdCI6MTc3NDY4NTg3MywiZXhwIjoxNzc1NTQ5ODczfQ.Db7pyUqOuMKEDMyrPghDF59i36qxzRU1K7fNzewFv7U; Max-Age=604800; Path=/; Expires=Sat, 04 Apr 2026 08:17:53 GMT; HttpOnly; SameSite=Strict
+2. Sending update request with predefined image...
+Error: Update failed (404): <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot PUT /api/user/update</pre>
+</body>
+</html>
+
+    at test (file:///C:/Users/priya/Downloads/MAJOR%20PROJECT%20MERN/virtualAssistant/backend/test3.js:40:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

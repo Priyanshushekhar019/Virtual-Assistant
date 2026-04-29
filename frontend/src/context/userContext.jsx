@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 export const userDataContext = createContext();
 
 function UserContext({ children }) {
-    const serverUrl = "http://localhost:8000/api/auth";
+    const serverUrl = "https://virtual-assistant-2pl0.onrender.com/api/auth";
 
     // Manage user data state centrally
     const [userData, setUserData] = useState(null);
@@ -19,7 +19,7 @@ function UserContext({ children }) {
 
     const handleCurrentUser = async () => {
         try {
-            const result = await axios.get(`http://localhost:8000/api/user/current`, { withCredentials: true });
+            const result = await axios.get(`https://virtual-assistant-2pl0.onrender.com/api/user/current`, { withCredentials: true });
             setUserData(result.data);
             console.log(result.data);
         } catch (error) {

@@ -159,7 +159,7 @@ function Home() {
                 try {
                     setUserText(transcript);
                     setResponse('Thinking...');
-                    const res = await axios.post(`http://localhost:8000/api/user/ask`, { command: transcript }, { withCredentials: true });
+                    const res = await axios.post(`https://virtual-assistant-2pl0.onrender.com/api/user/ask`, { command: transcript }, { withCredentials: true });
                     if (res.data) {
                         handleCommand(res.data);
                         setCommand(''); // Clear the input box after successful command
@@ -198,7 +198,7 @@ function Home() {
 
             setUserText(command);
             setResponse('Thinking...');
-            const res = await axios.post(`http://localhost:8000/api/user/ask`, { command }, { withCredentials: true });
+            const res = await axios.post(`https://virtual-assistant-2pl0.onrender.com/api/user/ask`, { command }, { withCredentials: true });
             console.log("Assistant responded:", res.data);
             if (res.data) {
                 handleCommand(res.data);

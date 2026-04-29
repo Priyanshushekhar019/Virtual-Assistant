@@ -35,7 +35,7 @@ function Customize2() {
                 formData.append('assistantImage', selectedImage);
             }
 
-            const response = await axios.put('http://localhost:8000/api/user/update', formData, {
+            const response = await axios.put('https://virtual-assistant-2pl0.onrender.com/api/user/update', formData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data'

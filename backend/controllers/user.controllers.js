@@ -60,9 +60,28 @@ export const askToAssistant = async (req, res) => {
     const { command } = req.body
     const user = await User.findById(req.userId)
     user.history.push(command)
-    user.save()
+    await user.save()
     const userName = user.name
     const assistantName = user.assistantName
+
+    // Fast-path bypass for instant actions without waiting for Gemini API
+    const lowerCmd = command.toLowerCase().trim();
+    if (lowerCmd.includes('open calculator')) {
+      return res.json({ type: 'calculator_open', userInput: command, response: 'Opening calculator' });
+    }
+    if (lowerCmd.includes('open instagram')) {
+      return res.json({ type: 'instagram_open', userInput: command, response: 'Opening Instagram' });
+    }
+    if (lowerCmd.includes('open facebook')) {
+      return res.json({ type: 'facebook_open', userInput: command, response: 'Opening Facebook' });
+    }
+    if (lowerCmd === 'open youtube') {
+      return res.json({ type: 'youtube_search', userInput: '', response: 'Opening YouTube' });
+    }
+    if (lowerCmd === 'open google') {
+      return res.json({ type: 'google_search', userInput: '', response: 'Opening Google' });
+    }
+
     const result = await geminiResponse(command, userName, assistantName)
 
     const jsonMatch = result.match(/\{[\s\S]*\}/)

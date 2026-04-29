@@ -94,7 +94,7 @@ function Home() {
         const recognition = new SpeechRecognitionApi();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = 'en-US'
+        recognition.lang = 'en-IN'
 
         recognitionRef.current = recognition
         let silenceTimer = null;
@@ -162,13 +162,14 @@ function Home() {
                     const res = await axios.post(`http://localhost:8000/api/user/ask`, { command: transcript }, { withCredentials: true });
                     if (res.data) {
                         handleCommand(res.data);
+                        setCommand(''); // Clear the input box after successful command
                     }
                 } catch (error) {
                     console.error("Assistant API Error:", error);
                     isSpeakingRef.current = false; // Release lock on error
                     startRecognition(); // Turn mic back on
                 }
-            }, 3000);
+            }, 1500);
         }
         const fallback = setInterval(() => {
             if (!isSpeakingRef.current && !isRecognizingRef.current) {

@@ -93,6 +93,7 @@ function Home() {
         }
         const recognition = new SpeechRecognitionApi();
         recognition.continuous = true;
+        recognition.interimResults = true;
         recognition.lang = 'en-US'
 
         recognitionRef.current = recognition
@@ -167,7 +168,7 @@ function Home() {
                     isSpeakingRef.current = false; // Release lock on error
                     startRecognition(); // Turn mic back on
                 }
-            }, 2000);
+            }, 3000);
         }
         const fallback = setInterval(() => {
             if (!isSpeakingRef.current && !isRecognizingRef.current) {
@@ -254,20 +255,22 @@ function Home() {
                     </button>
                 </div>
 
-                {listening && (
-                    <div className="flex flex-col items-center gap-3 mb-8 w-full">
-                        <img src={userGif} alt="Listening" className="w-[80px] rounded-full shadow-[0_0_20px_rgba(34,197,94,0.4)] border-2 border-green-500/40" />
-                        <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-4 py-1.5 rounded-full">
-                            <span className="relative flex h-2.5 w-2.5">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                            </span>
-                            <p className="text-xs text-green-400 font-bold tracking-widest uppercase">Listening to you...</p>
+                <div className="h-[120px] flex items-center justify-center w-full mb-8">
+                    {listening && (
+                        <div className="flex flex-col items-center gap-3 w-full">
+                            <img src={userGif} alt="Listening" className="w-[80px] rounded-full shadow-[0_0_20px_rgba(34,197,94,0.4)] border-2 border-green-500/40" />
+                            <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-4 py-1.5 rounded-full">
+                                <span className="relative flex h-2.5 w-2.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                                </span>
+                                <p className="text-xs text-green-400 font-bold tracking-widest uppercase">Listening to you...</p>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
 
-                <div className="w-full flex justify-between gap-6 mb-10 text-left">
+                <div className="w-full flex justify-between gap-6 mb-10 text-left min-h-[300px]">
                     {/* Left Column: User Input */}
                     <div className="flex-1 flex flex-col items-start gap-4">
                         {userText && (

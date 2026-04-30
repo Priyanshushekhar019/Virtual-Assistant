@@ -46,20 +46,37 @@ const geminiResponse = async (command, userName, assistantName) => {
     now your userInput- ${command}
     `;
 
-    const result = await axios.post(apiUrl, {
-      "contents": [{
-        "parts": [{ "text": prompt }]
-      }],
-      "generationConfig": {
-        "responseMimeType": "application/json"
+    let retries = 2;
+    while (retries > 0) {
+      try {
+        const result = await axios.post(apiUrl, {
+          "contents": [{
+            "parts": [{ "text": prompt }]
+          }],
+          "generationConfig": {
+            "responseMimeType": "application/json"
+          }
+        });
+        return result.data.candidates[0].content.parts[0].text;
+      } catch (error) {
+        retries--;
+        const status = error.response?.status;
+        
+        // If it's a 503 (Overloaded) or 429 (Rate Limit), wait 2 seconds and retry
+        if ((status === 503 || status === 429) && retries > 0) {
+          console.log(`Gemini overloaded (${status}). Retrying in 2 seconds...`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        } else {
+          // On final failure or non-retryable error, return a graceful spoken response
+          console.log("Error response from Gemini:", error.response?.data || error.message);
+          return JSON.stringify({
+            type: "general",
+            userInput: command,
+            response: "I'm sorry, my AI servers are currently experiencing heavy traffic. Please give me a moment and try again."
+          });
+        }
       }
-    })
-    return result.data.candidates[0].content.parts[0].text
-  } catch (error) {
-    const msg = error.response?.data ? JSON.stringify(error.response.data) : error.message;
-    console.log("Error response from Gemini:", msg);
-    throw new Error(msg);
-  }
+    }
 }
 
 export default geminiResponse

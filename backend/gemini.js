@@ -5,7 +5,6 @@ import moment from "moment"
 dotenv.config()
 
 const geminiResponse = async (command, userName, assistantName) => {
-  try {
     const apiUrl = `${process.env.GEMINI_API_URL}?key=${process.env.GEMINI_API_KEY}`
     const prompt = `You are a virtual assistant named ${assistantName} and created by ${userName}.
     You are not Google. You will now behave like a voice-enabled assistant.

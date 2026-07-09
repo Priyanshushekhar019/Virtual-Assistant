@@ -2,6 +2,8 @@
 
 A full-stack, intelligent Virtual Assistant application built using the MERN stack (MongoDB, Express.js, React.js, Node.js) and powered by Google's Gemini AI. The application allows users to interact with the assistant via both voice and text inputs, featuring a modern, premium glassmorphic UI.
 
+🚀 **Live Demo:** [virtual-assistant-two-phi.vercel.app](https://virtual-assistant-two-phi.vercel.app)
+
 ## 🚀 Features
 
 - **Voice & Text Interaction**: Seamlessly talk to the assistant or type your queries.

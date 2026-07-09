@@ -66,20 +66,46 @@ export const askToAssistant = async (req, res) => {
 
     // Fast-path bypass for instant actions without waiting for Gemini API
     const lowerCmd = command.toLowerCase().trim();
-    if (lowerCmd.includes('open calculator')) {
-      return res.json({ type: 'calculator_open', userInput: command, response: 'Opening calculator' });
-    }
-    if (lowerCmd.includes('open instagram')) {
-      return res.json({ type: 'instagram_open', userInput: command, response: 'Opening Instagram' });
-    }
-    if (lowerCmd.includes('open facebook')) {
-      return res.json({ type: 'facebook_open', userInput: command, response: 'Opening Facebook' });
-    }
-    if (lowerCmd === 'open youtube') {
-      return res.json({ type: 'youtube_search', userInput: '', response: 'Opening YouTube' });
-    }
-    if (lowerCmd === 'open google') {
-      return res.json({ type: 'google_search', userInput: '', response: 'Opening Google' });
+    if (lowerCmd.startsWith('open ')) {
+      const target = lowerCmd.substring(5).trim();
+      const websiteMap = {
+        'calculator': 'https://www.google.com/search?q=calculator',
+        'instagram': 'https://www.instagram.com',
+        'facebook': 'https://www.facebook.com',
+        'youtube': 'https://www.youtube.com',
+        'google': 'https://www.google.com',
+        'swiggy': 'https://www.swiggy.com',
+        'zomato': 'https://www.zomato.com',
+        'chatgpt': 'https://chatgpt.com',
+        'gmail': 'https://mail.google.com',
+        'github': 'https://github.com',
+        'netflix': 'https://www.netflix.com',
+        'linkedin': 'https://www.linkedin.com',
+        'amazon': 'https://www.amazon.com',
+        'flipkart': 'https://www.flipkart.com',
+        'weather': 'https://www.google.com/search?q=weather',
+      };
+
+      if (websiteMap[target]) {
+        const capitalized = target.charAt(0).toUpperCase() + target.slice(1);
+        return res.json({
+          type: 'open_website',
+          url: websiteMap[target],
+          userInput: command,
+          response: `Opening ${capitalized}`
+        });
+      } else {
+        // Fallback: If it's a single word (letters, numbers, hyphens), try opening as a .com directly
+        if (/^[a-zA-Z0-9\-]+$/.test(target)) {
+          const capitalized = target.charAt(0).toUpperCase() + target.slice(1);
+          return res.json({
+            type: 'open_website',
+            url: `https://www.${target}.com`,
+            userInput: command,
+            response: `Opening ${capitalized}`
+          });
+        }
+      }
     }
 
     const result = await geminiResponse(command, userName, assistantName)
@@ -117,12 +143,16 @@ export const askToAssistant = async (req, res) => {
           userInput: gemResult.userInput,
           response: `current month is ${moment().format("MMMM")}`
         });
+      case 'open_website':
+        return res.json({
+          type,
+          url: gemResult.url,
+          userInput: gemResult.userInput,
+          response: gemResult.response
+        });
       case 'google_search':
       case 'youtube_search':
       case 'youtube_play':
-      case 'calculator_open':
-      case 'instagram_open':
-      case 'facebook_open':
       case 'weather_show':
       case 'general':
         return res.json({

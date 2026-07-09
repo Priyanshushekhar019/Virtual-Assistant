@@ -12,10 +12,11 @@ const geminiResponse = async (command, userName, assistantName) => {
     Your task is to understand the user's natural language input and respond with a JSON object like this:
     
     {
-    "type":"general" | "google_search" | "youtube_search" | "Youtube_play" | "get_time" | "get_date" | "get_day" | "get_month"
-    | "calculator_open" | "instagram_open" | "facebook_open" | "weather_show",
+    "type":"general" | "google_search" | "youtube_search" | "youtube_play" | "get_time" | "get_date" | "get_day" | "get_month"
+    | "weather_show" | "open_website",
     "userInput":"<original user input>" {only remove your name from userinput if exists} and agar kisi ne google ya youtube pe kuch search karne ko bola hai to
     userInput me only bo search waala text jaaye,
+    "url": "<the full HTTPS URL of the website if type is open_website, otherwise null>",
     "response": "<a short spoken response to read out loud to the users>"}
     
     Instructions:
@@ -29,14 +30,12 @@ const geminiResponse = async (command, userName, assistantName) => {
     - "google_search": if user wants to search something on Google.
     - "youtube_search": if user wants to search something on Youtube.
     - "youtube_play": if user wants to play something on Youtube.
-    - "calculator_open": if user wants to open calculator.
-    - "instagram_open": if user wants to open instagram.
-    - "facebook_open": if user wants to open facebook.
     - "weather_show": if user wants to know weather.
     - "get_time": if user asks for current time.
     - "get_date": if user asks for today's date.
     - "get_day": if user asks what day it is.
     - "get_month": if user asks for the current month.
+    - "open_website": if the user wants to open any app, website, or online service (like calculator, instagram, facebook, swiggy, zomato, chatgpt, github, netflix, etc.). In this case, provide the official URL in the "url" key.
     
     Important:
     - Use ${userName} agar koi puche tumhe kisne banaya
